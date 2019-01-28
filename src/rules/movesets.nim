@@ -1,56 +1,20 @@
 import options
 import combat_states
 
-type
-  MoveSet* = enum
-    henchman,
-    vigilante
-  
-  WeaponClass* = enum
-    fists,
-    knife,
-    gun
-
-  ThrowableState* = enum
-    emptyHanded,
-    nearObject,
-    holdingObject
-
 proc getWeaponChecksForState(state: CombatState): Option[WeaponClass] =
   case state:
     of
-      standPassive,
-      standActive,
-      stumbling,
-      stunned,
-      charging,
-      prone,
-      dead,
-      dodging,
-      pickingUp,
-      throwingBefore,
-      throwingAfter,
-      parryingBefore,
-      parryingAfter,
-      catching,
-      takingWeapon,
-      losingWeapon,
-      blocking:
-        return none(WeaponClass)
-    of
       superpunchingBefore,
-      superpunchingAfter,
-      punchingBefore,
-      punchingAfter:
+      punchingBefore:
         return some(fists)
-    of
-      knifingBefore,
-      knifingAfter:
-        return some(knife)
-    of
-      shootingBefore,
-      shootingAfter:
-        return some(gun)
+    of throwingBefore:
+      return some(throwable)
+    of knifingBefore:
+      return some(knife)
+    of shootingBefore:
+      return some(gun)
+    else:
+      return none(WeaponClass)
 
 proc getIsLegalBaseMoveForHenchman(state: CombatState): bool =
   case state:
@@ -76,6 +40,7 @@ proc getIsLegalBaseMoveForHenchman(state: CombatState): bool =
       losingWeapon:
         return true
     of
+      breakingWeapon,
       parryingBefore,
       parryingAfter,
       catching,
@@ -103,6 +68,7 @@ proc getIsLegalBaseMoveForVigilante(state: CombatState): bool =
       parryingBefore,
       parryingAfter,
       catching,
+      breakingWeapon,
       takingWeapon:
         return true
     of
@@ -116,7 +82,11 @@ proc getIsLegalBaseMoveForVigilante(state: CombatState): bool =
       losingWeapon:
         return false
 
-proc getIsLegalMove*(kind: MoveSet, state: CombatState, weaponClass: WeaponClass): bool =
+proc getIsLegalMove*(kind: MoveSet,
+                     state: CombatState,
+                     weaponClass: WeaponClass,
+                     weaponClassOnFloor: Option[WeaponClass]): bool =
+
   case kind:
     of henchman:
       if not getIsLegalBaseMoveForHenchman(state):
@@ -126,8 +96,11 @@ proc getIsLegalMove*(kind: MoveSet, state: CombatState, weaponClass: WeaponClass
         return false
 
   let weaponToCheck = getWeaponChecksForState(state)
-  if not weaponToCheck.isNone:
-    if weaponToCheck.get() != weaponClass:
-      return false
+  if not weaponToCheck.isNone and weaponToCheck.get() != weaponClass:
+    return false
+
+  # can't pick up if nothing is on the floor
+  if state == pickingUp and weaponClassOnFloor.isNone:
+    return false
   
   return true
