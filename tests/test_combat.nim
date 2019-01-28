@@ -1,6 +1,9 @@
 when isMainModule:
   import options
+  import tables
   import unittest
+
+  import ../src/assets/spritemap_henchman
   import ../src/rules/movesets
   import ../src/rules/combat_states
 
@@ -52,3 +55,9 @@ when isMainModule:
         not getIsLegalMove(vigilante, shootingBefore, fists, none(WeaponClass))
         not getIsLegalMove(vigilante, shootingBefore, knife, none(WeaponClass))
         not getIsLegalMove(vigilante, shootingBefore, gun, none(WeaponClass))
+
+suite "Assets":
+  test "Spritemap: Henchman":
+    check:
+      SPRITEMAP_HENCHMEN.getOrDefault("prone") == (0, 1)
+      SPRITEMAP_HENCHMEN.getOrDefault("charging") == (3, 0)
