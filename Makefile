@@ -2,8 +2,4 @@
 
 run:
 	-killall main
-	nim c -r \
-		-d:glfwJustCdecl \
-		-d:raynimCompile \
-		--debugger:native \
-		--out:bin/main src/main.nim # --verbosity:2
+	nimble c -r src/main.nim

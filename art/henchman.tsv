@@ -1,6 +1,7 @@
-stand	stumble	stunned	charge
-prone	dead	dodge	block
-punch_before	punch_after	knife_before	knife_after
-shoot_before	shoot_after	superpunch_before	superpunch_after
-pick_up	throw_before	throw_after	box_in_flight
-bm_stand	bm_parry	bm_parry_throw	bm_dodge	bm_throw_before bm_throw_after	bm_punch_before	bm_punch_after
+stand	stumbling	stunned	charging
+prone	dead	dodging	blocking
+punching_before	punching_after	knifing_before	knifing_after
+shooting_before	shooting_after	superpunching_before	superpunching_after
+picking_up	throwing_before	throwing_after	box_in_flight losing_weapon
+bm_stand	bm_parrying_before	bm_parrying_after	bm_dodging	bm_throwing_before bm_throwing_after	bm_punching_before	bm_punching_after
+bm_catching bm_taking_weapon
