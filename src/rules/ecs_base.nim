@@ -12,14 +12,14 @@ proc newEntity*(): Entity =
   return nextEntity
 
 type
-  System*[T] = ref object of RootObj
+  System*[T: Component] = ref object of RootObj
     values*: CritBitTree[T]
 
 proc newSystem*[T](): System[T] =
   return System[T]()
 
-proc set*[T](system: System[T], entity: Entity, component: T) =
-
+proc set*[T: Component](system: System[T], entity: Entity, component: T) =
+  component.entity = entity
   system.values[$entity] = component
 
 proc get*[T](system: System[T], entity: Entity): Option[T] =

@@ -5,13 +5,9 @@ type
   ActorComponent* = ref object of Component
     actorKind*: ActorKind
     state*: CombatState
-  ActorSystem* = ref object of System[ActorComponent]
+  ActorSystem*[T: ActorComponent] = ref object of System[T]
 
-proc newActorSystem*(): ActorSystem =
-  echo("1")
-  let s = ActorSystem()
-  echo("2")
-  return s
+proc newActorSystem*(): ActorSystem[ActorComponent] = ActorSystem[ActorComponent]()
 
 proc newActorComponent*(actorKind: ActorKind, state: CombatState): ActorComponent =
   return ActorComponent(actorKind: actorKind, state: state)
