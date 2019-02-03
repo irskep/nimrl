@@ -9,6 +9,8 @@ else:
   discard
 
 import raynim
+import game/run
 
 when isMainModule:
-  echo("Hello, World!")
+  echo("Running")
+  run()
