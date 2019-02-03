@@ -1,6 +1,9 @@
+import options
 import raynim
+
 import rules/combat_states
 import assets/asset_store
+import scenes/base_scene
 import scenes/state_debug_scene
 
 proc run*() =
@@ -11,7 +14,7 @@ proc run*() =
   SetWindowPosition(0, 20)
   SetTargetFPS(60)
 
-  var s = newStateDebugScene(newAssetStore())
+  var s: Scene = newStateDebugScene(newAssetStore())
 
   while not WindowShouldClose() and not IsWindowHidden():
     s.update()
@@ -20,3 +23,6 @@ proc run*() =
     ClearBackground(newColor(uint8(24), uint8(24), uint8(24), uint8(255)))
     s.draw()
     EndDrawing()
+
+    if s.nextScene.isSome:
+      s = s.nextScene.get()
