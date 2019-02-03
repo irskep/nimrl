@@ -18,5 +18,9 @@ proc newVigECSForStateDebugScene*(): VigECS =
 
   let charE = newEntity()
   ecs.actorSystem.set(charE, newActorComponent(henchman, standPassive))
+  # This is what I want to get working. ActorSystem.get should return an
+  # ActorComponent without additional casting, so I can just pull properties
+  # off it directly.
+  echo(ecs.actorSystem.get(charE).actorKind)
 
   return ecs
