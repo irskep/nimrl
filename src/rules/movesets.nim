@@ -82,7 +82,7 @@ proc getIsLegalBaseMoveForVigilante(state: CombatState): bool =
       losingWeapon:
         return false
 
-proc getIsLegalMove*(kind: MoveSet,
+proc getIsLegalMove*(kind: ActorKind,
                      state: CombatState,
                      weaponClass: WeaponClass,
                      weaponClassOnFloor: Option[WeaponClass]): bool =

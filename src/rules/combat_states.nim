@@ -27,7 +27,7 @@ type
     losingWeapon,
     breakingWeapon
 
-  MoveSet* = enum
+  ActorKind* = enum
     henchman,
     vigilante
   
@@ -40,3 +40,31 @@ type
   ThrowableState* = enum
     notNearObject,
     nearObject
+
+proc next*(state: CombatState): CombatState =
+  var isNext = false
+  for s2 in CombatState.low..CombatState.high:
+    if isNext:
+      return s2
+    elif state == s2:
+      isNext = true
+  if isNext:
+    return CombatState.low
+
+proc previous*(state: CombatState): CombatState =
+  var prev = CombatState.high
+  for s2 in CombatState.low..CombatState.high:
+    if state == s2:
+      return prev
+    prev = s2
+  return CombatState.low
+
+proc next*(actorKind: ActorKind): ActorKind =
+  var isNext = false
+  for s2 in ActorKind.low..ActorKind.high:
+    if isNext:
+      return s2
+    elif actorKind == s2:
+      isNext = true
+  if isNext:
+    return ActorKind.low

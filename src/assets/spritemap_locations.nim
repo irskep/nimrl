@@ -5,7 +5,7 @@ import "../rules/combat_states"
 import "../util"
 import spritemap_henchman
 
-proc spritemapIDHenchman*(state: CombatState): Option[string] =
+proc spritemapIDHenchman(state: CombatState): Option[string] =
   case state
     of standPassive:        return some("stand")
     of standActive:         return some("stand")
@@ -34,14 +34,14 @@ proc spritemapIDHenchman*(state: CombatState): Option[string] =
     of losingWeapon:        return some("losing_weapon")
     of breakingWeapon:      return none(string)
 
-proc spritemapPointHenchman*(state: CombatState): IntPoint =
+proc spritemapPointHenchman(state: CombatState): IntPoint =
   let maybeID = spritemapIDHenchman(state)
   if maybeID.isNone:
     return (0, 0)
   else:
     return SPRITEMAP_HENCHMEN.getOrDefault(maybeID.get())
 
-proc spritemapIDBatman*(state: CombatState): Option[string] =
+proc spritemapIDVigilante(state: CombatState): Option[string] =
   case state
     of standPassive:        return some("bm_stand")
     of standActive:         return some("bm_stand")
@@ -70,9 +70,14 @@ proc spritemapIDBatman*(state: CombatState): Option[string] =
     of losingWeapon:        return none(string)
     of breakingWeapon:      return some("bm_disabling_weapon")
 
-proc spritemapPointBatman*(state: CombatState): IntPoint =
-  let maybeID = spritemapIDBatman(state)
+proc spritemapPointVigilante(state: CombatState): IntPoint =
+  let maybeID = spritemapIDVigilante(state)
   if maybeID.isNone:
     return (0, 0)
   else:
     return SPRITEMAP_HENCHMEN.getOrDefault(maybeID.get())
+
+proc spritemapPoint*(actorKind: ActorKind, state: CombatState): IntPoint =
+  case actorKind
+    of henchman: return spritemapPointHenchman(state)
+    of vigilante: return spritemapPointVigilante(state)
