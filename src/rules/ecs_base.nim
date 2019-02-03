@@ -12,7 +12,7 @@ proc newEntity*(): Entity =
   return nextEntity
 
 type
-  System*[T: Component] = ref object of RootObj
+  System*[T] = ref object of RootObj
     values*: CritBitTree[T]
 
 proc newSystem*[T](): System[T] =
