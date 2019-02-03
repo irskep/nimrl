@@ -18,11 +18,11 @@ type
 proc newSystem*[T](): System[T] =
   return System[T]()
 
-proc set*[T: Component](system: System[T], entity: Entity, component: T) =
+proc `[]=`*[T: Component](system: System[T], entity: Entity, component: T) =
   component.entity = entity
   system.values[$entity] = component
 
-proc get*[T](system: System[T], entity: Entity): Option[T] =
+proc `[]`*[T](system: System[T], entity: Entity): Option[T] =
   if system.values.contains($entity):
     return some(system.values[$entity])
   else:

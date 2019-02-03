@@ -1,3 +1,5 @@
+import options
+
 import ecs_base
 import ecs_actor
 import ecs_item
@@ -11,16 +13,11 @@ type
     spatialSystem: SpatialSystem
 
 proc newVigECSForStateDebugScene*(): VigECS =
-  let ecs = VigECS(
+  result = VigECS(
     actorSystem: newActorSystem(),
     itemSystem: newItemSystem(),
     spatialSystem: newSpatialSystem())
 
   let charE = newEntity()
-  ecs.actorSystem.set(charE, newActorComponent(henchman, standPassive))
-  # This is what I want to get working. ActorSystem.get should return an
-  # ActorComponent without additional casting, so I can just pull properties
-  # off it directly.
-  echo(ecs.actorSystem.get(charE).actorKind)
-
-  return ecs
+  result.actorSystem[charE] = newActorComponent(henchman, standPassive)
+  echo(result.actorSystem[charE].get().actorKind)
