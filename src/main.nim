@@ -8,6 +8,7 @@ else:
   # linux?
   discard
 
+import segfaults
 import raynim
 import game_loop
 

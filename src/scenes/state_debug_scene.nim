@@ -3,6 +3,7 @@ import raynim
 import base_scene
 import ../assets/asset_store
 import ../rules/combat_states
+import ../rules/ecs
 import ../util
 
 type
