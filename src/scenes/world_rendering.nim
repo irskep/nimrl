@@ -45,5 +45,4 @@ proc drawWorld*(ecs: VigECS, assetStore: AssetStore, camera: Camera2D) =
     for y, row in ecs.spatialSystem.tilemap.cells[2]:
       for x, entities in row:
         for entity in entities:
-          maybeDrawTile(ecs, assetStore, entity, (x, y))
           maybeDrawActor(ecs, assetStore, entity, (x, y))

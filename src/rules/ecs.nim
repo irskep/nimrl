@@ -29,10 +29,12 @@ proc addHenchman(ecs: VigECS, point: IntPoint): Entity =
 proc setTile*(ecs: VigECS, point: IntPoint, tile: EnvironmentTile): Entity =
   if ecs.spatialSystem.tilemap.entities(0, point).len == 0:
     result = newEntity()
+    ecs.spatialSystem.add(result, 0, point)
     ecs.tileSystem[result] = newTileComponent(tile)
   else:
     result = ecs.spatialSystem.tilemap.entities(0, point)[0]
     ecs.tileSystem[result].get().tile = tile
+    ecs.spatialSystem.move(result, 0, point)
 
 proc populateTilemap(ecs: VigECS) =
   for y in 0..<ecs.spatialSystem.tilemap.height:
@@ -43,6 +45,7 @@ proc populateTilemap(ecs: VigECS) =
         discard ecs.setTile((x, y), wall)
       else:
         discard ecs.setTile((x, y), floor)
+  # echo(ecs.spatialSystem.tilemap.cells[0])
 
 proc newVigECSForStateDebugScene*(): VigECS =
   result = VigECS(
@@ -51,7 +54,7 @@ proc newVigECSForStateDebugScene*(): VigECS =
     spatialSystem: newSpatialSystem((5, 5)),
     tileSystem: newTileSystem())
   result.populateTilemap()
-  discard result.addHenchman((1, 1))
+  discard result.addHenchman((2, 2))
 
 export ecs_base
 export ecs_actor
