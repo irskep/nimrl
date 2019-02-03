@@ -9,8 +9,8 @@ else:
   discard
 
 import raynim
-import game/run
+import game_loop
 
 when isMainModule:
   echo("Running")
-  run()
+  run() 

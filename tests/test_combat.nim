@@ -3,9 +3,10 @@ when isMainModule:
   import tables
   import unittest
 
-  import ../src/assets/spritemap_henchman
-  import ../src/rules/movesets
-  import ../src/rules/combat_states
+  import src/assets/spritemap_henchman
+  import src/rules/movesets
+  import src/rules/combat_states
+  import src/main  # import everything to reveal compile errors
 
   suite "Legal moves":
     test "Henchman can stand":
