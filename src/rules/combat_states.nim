@@ -41,6 +41,12 @@ type
     notNearObject,
     nearObject
 
+  EnvironmentTile* = enum
+    floor,
+    wall,
+    doorClosed,
+    doorOpen
+
 proc next*(state: CombatState): CombatState =
   var isNext = false
   for s2 in CombatState.low..CombatState.high:

@@ -35,6 +35,17 @@ let SPRITEMAP_HENCHMEN* = makeSpritemap(@[
     "bm_stunned"],
 ])
 
+let SPRITEMAP_TILES = makeSpritemap(@[
+  @["floor", "wall", "door_closed", "door_open"],
+  @[],
+  @[],
+  @[],
+  @[],
+  @[],
+  @[],
+  @["throwable", "gun", "knife"],
+])
+
 proc spritemapIDHenchman(state: CombatState): Option[string] =
   case state
     of standPassive:        return some("stand")
@@ -84,8 +95,8 @@ proc spritemapIDVigilante(state: CombatState): Option[string] =
     of superpunchingBefore: return none(string)
     of superpunchingAfter:  return none(string)
     of pickingUp:           return some("bm_picking_up")
-    of throwingBefore:      return some("throwing_before")
-    of throwingAfter:       return some("throwing_after")
+    of throwingBefore:      return some("bm_throwing_before")
+    of throwingAfter:       return some("bm_throwing_after")
     of parryingBefore:      return some("bm_parrying_before")
     of parryingAfter:       return some("bm_parrying_after")
     of catching:            return some("bm_catching")
@@ -93,7 +104,7 @@ proc spritemapIDVigilante(state: CombatState): Option[string] =
     of losingWeapon:        return none(string)
     of breakingWeapon:      return some("bm_disabling_weapon")
 
-proc spritemapPoint*(actorKind: ActorKind, state: CombatState): IntPoint =
+proc actorSpritemapPoint*(actorKind: ActorKind, state: CombatState): IntPoint =
   let maybeID = case actorKind
     of henchman: spritemapIDHenchman(state)
     of vigilante: spritemapIDVigilante(state)
@@ -101,4 +112,11 @@ proc spritemapPoint*(actorKind: ActorKind, state: CombatState): IntPoint =
     result = (0, 0)
   else:
     result = SPRITEMAP_HENCHMEN.getOrDefault(maybeID.get())
- 
+
+proc tileSpritemapPoint*(tile: EnvironmentTile): IntPoint =
+  let name = case tile
+    of floor: "floor"
+    of wall: "wall"
+    of doorClosed: "door_closed"
+    of doorOpen: "door_open"
+  result = SPRITEMAP_TILES.getOrDefault(name)

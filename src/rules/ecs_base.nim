@@ -1,5 +1,6 @@
 import critbits
 import options
+import strutils
 
 type
   Entity* = int
@@ -34,3 +35,7 @@ proc unset*[T: Component](system: System[T], entity: Entity) =
 iterator items*[T](system: System[T]): T =
   for val in system.values:
     yield val
+
+iterator keys*[T](system: System[T]): Entity =
+  for val in system.values.keys:
+    yield parseInt(val)

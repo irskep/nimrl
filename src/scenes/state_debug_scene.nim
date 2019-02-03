@@ -1,4 +1,6 @@
+import critbits
 import options
+import sequtils
 
 import raynim
 
@@ -24,10 +26,11 @@ proc newStateDebugScene*(assetStore: AssetStore): StateDebugScene =
   camera.offset = newVector2(0, 0)
   camera.target = newVector2(0, 0)
 
+  let ecs = newVigECSForStateDebugScene()
   StateDebugScene(
     assetStore: assetStore,
-    ecs: newVigECSForStateDebugScene(),
-    entity: 1,
+    ecs: ecs,
+    entity: toSeq(ecs.actorSystem.keys)[0],
     camera: camera)
 
 method name*(s: StateDebugScene): string = "StateDebugScene"

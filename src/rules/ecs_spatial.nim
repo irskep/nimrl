@@ -20,8 +20,8 @@ proc newSpatialComponent*(point: IntPoint): SpatialComponent =
 
 ### SYSTEM ###
   
-proc newSpatialSystem*(): SpatialSystem =
-  result = SpatialSystem(tilemap: newTilemap(3, 3, 3))
+proc newSpatialSystem*(size: IntPoint): SpatialSystem =
+  result = SpatialSystem(tilemap: newTilemap(3, size.x, size.y))
 
 proc add*(spatialSystem: SpatialSystem, entity: Entity, layer: int, point: IntPoint) =
   spatialSystem[entity] = newSpatialComponent(point) 
