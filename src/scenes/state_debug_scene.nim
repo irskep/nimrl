@@ -5,6 +5,7 @@ import raynim
 import base_scene
 import ../assets/asset_store
 import ../rules/ecs
+import ../rules/tilemap
 import ../util
 
 type
@@ -16,17 +17,19 @@ type
 proc newStateDebugScene*(assetStore: AssetStore): StateDebugScene =
   StateDebugScene(assetStore: assetStore, ecs: newVigECSForStateDebugScene(), entity: 1)
 
+
+
 method name*(s: StateDebugScene): string = "StateDebugScene"
 
 method update*(s: StateDebugScene) =
   let actorC = s.ecs.actorSystem[s.entity].get()
   
-  if IsKeyPressed((cint)KEY_RIGHT):
+  if IsKeyPressed(KEY_RIGHT):
     actorC.state = actorC.state.next
-  elif IsKeyPressed((cint)KEY_LEFT):
+  elif IsKeyPressed(KEY_LEFT):
     actorC.state = actorC.state.previous
 
-  if IsKeyPressed((cint)KEY_TAB):
+  if IsKeyPressed(KEY_TAB):
     actorC.actorKind = actorC.actorKind.next
 
 method draw*(s: StateDebugScene) =
@@ -38,4 +41,6 @@ method draw*(s: StateDebugScene) =
   let x = GetScreenWidth() / 2 - s.assetStore.tileSizeZoomed / 2
   let y = GetScreenHeight() / 2 - s.assetStore.tileSizeZoomed / 2
 
-  s.assetStore.drawAsset(s.assetStore.getImageAsset(actorC.actorKind, actorC.state), newVector2(x, y))
+  s.assetStore.drawAsset(
+    s.assetStore.getImageAsset(actorC.actorKind, actorC.state),
+    newVector2(x, y))

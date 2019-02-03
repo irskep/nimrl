@@ -6,10 +6,10 @@ type
   Component* = ref object of RootObj
     entity*: Entity
 
-var nextEntity = 0
+var lastEntity = 0
 proc newEntity*(): Entity =
-  nextEntity += 1
-  return nextEntity
+  lastEntity += 1
+  return lastEntity
 
 type
   System*[T] = ref object of RootObj
