@@ -1,9 +1,39 @@
 import options
 import tables
 
-import "../rules/combat_states"
-import "../util"
-import spritemap_henchman
+import ../rules/combat_states
+import ../util
+
+proc makeSpritemap(values: seq[seq[string]]): ref Table[string, IntPoint] =
+  result = newTable[string, IntPoint](64)
+
+  for row_i, row in pairs(values):
+    for col_i, s in pairs(row):
+      result[s] = (x: col_i, y: row_i)
+
+let SPRITEMAP_HENCHMEN* = makeSpritemap(@[
+  @["stand", "stumbling", "stunned", "charging"],
+  @["prone", "dead", "dodging", "blocking"],
+  @["punching_before", "punching_after", "knifing_before", "knifing_after"],
+  @["shooting_before", "shooting_after", "superpunching_before", "superpunching_after"],
+  @["picking_up", "throwing_before", "throwing_after", "box_in_flight", "losing_weapon"],
+  @[
+    "bm_stand",
+    "bm_parrying_before",
+    "bm_parrying_after",
+    "bm_dodging",
+    "bm_throwing_before",
+    "bm_throwing_after",
+    "bm_punching_before",
+    "bm_punching_after",
+  ],
+  @[
+    "bm_catching",
+    "bm_taking_weapon",
+    "bm_disabling_weapon",
+    "bm_picking_up",
+    "bm_stunned"],
+])
 
 proc spritemapIDHenchman(state: CombatState): Option[string] =
   case state
@@ -34,13 +64,6 @@ proc spritemapIDHenchman(state: CombatState): Option[string] =
     of losingWeapon:        return some("losing_weapon")
     of breakingWeapon:      return none(string)
 
-proc spritemapPointHenchman(state: CombatState): IntPoint =
-  let maybeID = spritemapIDHenchman(state)
-  if maybeID.isNone:
-    return (0, 0)
-  else:
-    return SPRITEMAP_HENCHMEN.getOrDefault(maybeID.get())
-
 proc spritemapIDVigilante(state: CombatState): Option[string] =
   case state
     of standPassive:        return some("bm_stand")
@@ -70,14 +93,12 @@ proc spritemapIDVigilante(state: CombatState): Option[string] =
     of losingWeapon:        return none(string)
     of breakingWeapon:      return some("bm_disabling_weapon")
 
-proc spritemapPointVigilante(state: CombatState): IntPoint =
-  let maybeID = spritemapIDVigilante(state)
-  if maybeID.isNone:
-    return (0, 0)
-  else:
-    return SPRITEMAP_HENCHMEN.getOrDefault(maybeID.get())
-
 proc spritemapPoint*(actorKind: ActorKind, state: CombatState): IntPoint =
-  case actorKind
-    of henchman: return spritemapPointHenchman(state)
-    of vigilante: return spritemapPointVigilante(state)
+  let maybeID = case actorKind
+    of henchman: spritemapIDHenchman(state)
+    of vigilante: spritemapIDVigilante(state)
+  if maybeID.isNone:
+    result = (0, 0)
+  else:
+    result = SPRITEMAP_HENCHMEN.getOrDefault(maybeID.get())
+ 

@@ -3,7 +3,7 @@ when isMainModule:
   import tables
   import unittest
 
-  import src/assets/spritemap_henchman
+  import src/assets/spritemaps
   import src/rules/movesets
   import src/rules/combat_states
   import src/rules/ecs

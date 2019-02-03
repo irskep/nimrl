@@ -1,7 +1,9 @@
 import raynim
-import spritemap_locations
-import ../util
+
 import ../rules/combat_states
+import ../util
+
+import spritemaps
 
 type
   ImageAsset* = tuple[texture: Texture2D, location: IntPoint]
