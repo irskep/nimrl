@@ -11,7 +11,7 @@ proc run*() =
   SetWindowPosition(0, 20)
   SetTargetFPS(60)
 
-  var s = newStateDebugScene(newAssetStore(), standPassive)
+  var s = newStateDebugScene(newAssetStore())
 
   while not WindowShouldClose() and not IsWindowHidden():
     s.update()

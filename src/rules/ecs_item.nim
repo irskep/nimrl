@@ -5,3 +5,4 @@ type
   ItemSystem* = ref object of System[ItemComponent]
 
 proc newItemSystem*(): ItemSystem = ItemSystem()
+proc newItemComponent*(): ItemComponent = ItemComponent()

@@ -7,3 +7,5 @@ type
   SpatialSystem* = ref object of System[SpatialComponent]
 
 proc newSpatialSystem*(): SpatialSystem = SpatialSystem()
+proc newSpatialComponent*(point: IntPoint): SpatialComponent =
+  result = SpatialComponent(point: point)

@@ -6,7 +6,12 @@ when isMainModule:
   import src/assets/spritemap_henchman
   import src/rules/movesets
   import src/rules/combat_states
+  import src/rules/ecs
   import src/main  # import everything to reveal compile errors
+
+  suite "Init":
+    test "ECS":
+      discard newVigECSForStateDebugScene()
 
   suite "Legal moves":
     test "Henchman can stand":

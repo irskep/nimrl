@@ -28,6 +28,9 @@ proc `[]`*[T](system: System[T], entity: Entity): Option[T] =
   else:
     return none(T)
 
-iterator all*[T](system: System[T]): T =
+proc unset*[T: Component](system: System[T], entity: Entity) =
+  system.values[$entity] = nil
+
+iterator items*[T](system: System[T]): T =
   for val in system.values:
     yield val
