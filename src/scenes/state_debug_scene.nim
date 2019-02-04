@@ -37,14 +37,27 @@ method name*(s: StateDebugScene): string = "StateDebugScene"
 
 method update*(s: StateDebugScene) =
   let actorC = s.ecs.actorSystem[s.entity].get()
-  
+
   if IsKeyPressed(KEY_RIGHT):
     actorC.state = actorC.state.next
-  elif IsKeyPressed(KEY_LEFT):
+
+  if IsKeyPressed(KEY_LEFT):
     actorC.state = actorC.state.previous
 
   if IsKeyPressed(KEY_TAB):
     actorC.actorKind = actorC.actorKind.next
+
+  if IsKeyPressed(KEY_W):
+    actorC.orientation = 0
+
+  if IsKeyPressed(KEY_D):
+    actorC.orientation = 1
+
+  if IsKeyPressed(KEY_S):
+    actorC.orientation = 2
+
+  if IsKeyPressed(KEY_A):
+    actorC.orientation = 3
 
 method draw*(s: StateDebugScene) =
   s.camera.target = s.ecs.getPosition(s.assetStore, s.entity)

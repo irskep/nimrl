@@ -19,7 +19,7 @@ type
 
 proc addHenchman(ecs: VigECS, point: IntPoint): Entity =
   let charE = newEntity()
-  ecs.actorSystem[charE] = newActorComponent(henchman, standPassive)
+  ecs.actorSystem[charE] = newActorComponent(henchman, standPassive, 0)
   assert(ecs.actorSystem[charE].get().entity == charE)
 
   ecs.itemSystem[charE] = newItemComponent()

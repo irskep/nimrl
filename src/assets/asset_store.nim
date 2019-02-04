@@ -45,8 +45,15 @@ proc getActorImageAsset*(assetStore: AssetStore, kind: ActorKind, state: CombatS
 proc getTileImageAsset*(assetStore: AssetStore, tile: EnvironmentTile): ImageAsset =
   result = (assetStore.tilesTexture, tileSpritemapPoint(tile))
 
-proc drawAsset*(assetStore: AssetStore, asset: ImageAsset, point: Vector2) =
-  DrawTextureRec(asset.texture, assetStore.getRect(asset.location), point, WHITE)
+proc drawAsset*(assetStore: AssetStore, asset: ImageAsset, point: Vector2, orientation: int) =
+  let w = assetStore.tileSizeZoomed
+  DrawTexturePro(
+    asset.texture,
+    assetStore.getRect(asset.location),
+    newRectangle(point.x + w / 2, point.y + w / 2, w, w),
+    newVector2(w / 2, w / 2),
+    cfloat(orientation) * 90,
+    WHITE)
 
 proc newAssetStore*(zoom: cfloat): AssetStore =
   result = AssetStore()

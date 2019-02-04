@@ -21,7 +21,8 @@ proc maybeDrawTile(ecs: VigECS, assetStore: AssetStore, entity: Entity, point: I
   let tileC = maybeTileC.get()
   assetStore.drawAsset(
     assetStore.getTileImageAsset(tileC.tile),
-    ecs.getPosition(assetStore, point))
+    ecs.getPosition(assetStore, point),
+    0)
 
 proc maybeDrawActor(ecs: VigECS, assetStore: AssetStore, entity: Entity, point: IntPoint) =
   let maybeActorC = ecs.actorSystem[entity]
@@ -29,7 +30,8 @@ proc maybeDrawActor(ecs: VigECS, assetStore: AssetStore, entity: Entity, point: 
   let actorC = maybeActorC.get()
   assetStore.drawAsset(
     assetStore.getActorImageAsset(actorC.actorKind, actorC.state),
-    ecs.getPosition(assetStore, point))
+    ecs.getPosition(assetStore, point),
+    actorC.orientation)
 
 proc drawWorld*(ecs: VigECS, assetStore: AssetStore, camera: Camera2D) =
   camera.draw proc(): void =
