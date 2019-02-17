@@ -1,5 +1,5 @@
 type
-  CombatState* = enum
+  ActorState* = enum
     standPassive,
     standActive,
     stumbling,
@@ -47,23 +47,23 @@ type
     doorClosed,
     doorOpen
 
-proc next*(state: CombatState): CombatState =
+proc next*(state: ActorState): ActorState =
   var isNext = false
-  for s2 in CombatState.low..CombatState.high:
+  for s2 in ActorState.low..ActorState.high:
     if isNext:
       return s2
     elif state == s2:
       isNext = true
   if isNext:
-    return CombatState.low
+    return ActorState.low
 
-proc previous*(state: CombatState): CombatState =
-  var prev = CombatState.high
-  for s2 in CombatState.low..CombatState.high:
+proc previous*(state: ActorState): ActorState =
+  var prev = ActorState.high
+  for s2 in ActorState.low..ActorState.high:
     if state == s2:
       return prev
     prev = s2
-  return CombatState.low
+  return ActorState.low
 
 proc next*(actorKind: ActorKind): ActorKind =
   var isNext = false
@@ -74,3 +74,12 @@ proc next*(actorKind: ActorKind): ActorKind =
       isNext = true
   if isNext:
     return ActorKind.low
+
+### ENV ###
+
+proc isPassable*(tile: EnvironmentTile): bool =
+  case tile:
+    of floor: true
+    of wall: false
+    of doorOpen: true
+    of doorClosed: false

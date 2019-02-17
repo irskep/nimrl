@@ -1,7 +1,7 @@
 import options
 import raynim
 
-import rules/combat_states
+import rules/actor_states
 import assets/asset_store
 import scenes/base_scene
 import scenes/state_debug_scene
@@ -14,10 +14,19 @@ proc run*() =
   SetWindowPosition(0, 20)
   SetTargetFPS(60)
 
-  var s: Scene = newStateDebugScene(newAssetStore(4))
+  InitAudioDevice()
+
+  let assetStore = newAssetStore(4)
+  var s: Scene = newStateDebugScene(assetStore)
+
+  # PlayMusicStream(assetStore.musicTrack1)
+  # PlayMusicStream(assetStore.musicTrack2)
 
   while not WindowShouldClose() and not IsWindowHidden():
     s.update()
+
+    # UpdateMusicStream(assetStore.musicTrack1)
+    # UpdateMusicStream(assetStore.musicTrack2)
 
     BeginDrawing()
     ClearBackground(newColor(uint8(24), uint8(24), uint8(24), uint8(255)))
@@ -26,3 +35,6 @@ proc run*() =
 
     if s.nextScene.isSome:
       s = s.nextScene.get()
+
+  assetStore.unload()
+  CloseAudioDevice()

@@ -33,3 +33,13 @@ proc add*(tilemap: Tilemap, entity: Entity, layer: int, point: IntPoint) =
 
 proc remove*(tilemap: Tilemap, entity: Entity, layer: int, point: IntPoint) =
   tilemap.cells[layer][point.y][point.x].keepIf(proc(e: Entity): bool = e != entity)
+  
+proc findLayer*(tilemap: Tilemap, entity: Entity, point: IntPoint): int =
+  for layer in 0..<tilemap.layersCount:
+    if tilemap.cells[layer][point.y][point.x].contains(entity):
+      return layer
+  assert(false, "Can't find entity at given point")
+  return 0
+
+proc isInBounds*(tilemap: Tilemap, point: IntPoint): bool =
+  return point.x >= 0 and point.y >= 0 and point.x < tilemap.width and point.y < tilemap.height

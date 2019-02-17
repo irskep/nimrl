@@ -3,13 +3,13 @@ import options
 import raynim
 
 import ../assets/asset_store
-import ../rules/combat_states
+import ../rules/actor_states
 import ../rules/ecs
 import ../util
 
 proc getPosition*(ecs: VigECS, assetStore: AssetStore, point: IntPoint): Vector2 =
-  result.x = cfloat(point.x) * assetStore.tileSizeZoomed
-  result.y = cfloat(point.y) * assetStore.tileSizeZoomed
+  result.x = cfloat(point.x * assetStore.tileSizeZoomed)
+  result.y = cfloat(point.y * assetStore.tileSizeZoomed)
 
 proc getPosition*(ecs: VigECS, assetStore: AssetStore, entity: Entity): Vector2 =
   let c = ecs.spatialSystem[entity].get()
@@ -31,7 +31,7 @@ proc maybeDrawActor(ecs: VigECS, assetStore: AssetStore, entity: Entity, point: 
   assetStore.drawAsset(
     assetStore.getActorImageAsset(actorC.actorKind, actorC.state),
     ecs.getPosition(assetStore, point),
-    actorC.orientation)
+    actorC.orientation.cwFromTop)
 
 proc drawWorld*(ecs: VigECS, assetStore: AssetStore, camera: Camera2D) =
   camera.draw proc(): void =

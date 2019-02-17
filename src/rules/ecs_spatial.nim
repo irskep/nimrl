@@ -33,3 +33,30 @@ proc move*(spatialSystem: SpatialSystem, entity: Entity, layer: int, point: IntP
   c.layer = layer
   c.point = point
   spatialSystem.tilemap.add(entity, layer, point)
+
+proc move*(spatialSystem: SpatialSystem, entity: Entity, point: IntPoint) =
+  let c = spatialSystem[entity].get()
+  let layer = spatialSystem.tilemap.findLayer(entity, c.point)
+  spatialSystem.tilemap.remove(entity, c.layer, c.point)
+  c.layer = layer
+  c.point = point
+  spatialSystem.tilemap.add(entity, layer, point)
+
+proc isInBounds*(spatialSystem: SpatialSystem, point: IntPoint): bool =
+  result = spatialSystem.tilemap.isInBounds(point)
+
+proc find*(spatialSystem: SpatialSystem, layer: int, point: IntPoint): Option[Entity] =
+  let tilemap = spatialSystem.tilemap
+
+  if point.x < 0 or point.y < 0 or point.x >= tilemap.width or point.y >= tilemap.height:
+    result = none(Entity)
+
+  let entities = tilemap.entities(layer, point)
+
+  if entities.len == 0:
+    result = none(Entity)
+  elif entities.len == 1:
+    result = some(entities[0])
+  else:
+    assert(false, "Too many entities at " & $point)
+    result = some(entities[0])

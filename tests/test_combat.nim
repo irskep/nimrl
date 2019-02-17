@@ -5,7 +5,7 @@ when isMainModule:
 
   import src/assets/spritemaps
   import src/rules/movesets
-  import src/rules/combat_states
+  import src/rules/actor_states
   import src/rules/ecs
   import src/main  # import everything to reveal compile errors
 

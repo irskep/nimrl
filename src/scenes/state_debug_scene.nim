@@ -5,6 +5,7 @@ import sequtils
 import raynim
 
 import ../assets/asset_store
+import ../rules/actor_state_transitions
 import ../rules/ecs
 import ../rules/tilemap
 import ../util
@@ -38,26 +39,19 @@ method name*(s: StateDebugScene): string = "StateDebugScene"
 method update*(s: StateDebugScene) =
   let actorC = s.ecs.actorSystem[s.entity].get()
 
-  if IsKeyPressed(KEY_RIGHT):
+  if IsKeyPressed(KEY_E):
     actorC.state = actorC.state.next
 
-  if IsKeyPressed(KEY_LEFT):
+  if IsKeyPressed(KEY_R):
     actorC.state = actorC.state.previous
 
-  if IsKeyPressed(KEY_TAB):
+  if IsKeyPressed(KEY_K):
     actorC.actorKind = actorC.actorKind.next
 
-  if IsKeyPressed(KEY_W):
-    actorC.orientation = 0
-
-  if IsKeyPressed(KEY_D):
-    actorC.orientation = 1
-
-  if IsKeyPressed(KEY_S):
-    actorC.orientation = 2
-
-  if IsKeyPressed(KEY_A):
-    actorC.orientation = 3
+  if IsKeyPressed(KEY_UP):    actorC.orientation = up
+  if IsKeyPressed(KEY_RIGHT): actorC.orientation = right
+  if IsKeyPressed(KEY_DOWN):  actorC.orientation = down
+  if IsKeyPressed(KEY_LEFT):  actorC.orientation = left
 
 method draw*(s: StateDebugScene) =
   s.camera.target = s.ecs.getPosition(s.assetStore, s.entity)

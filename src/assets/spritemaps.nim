@@ -1,7 +1,7 @@
 import options
 import tables
 
-import ../rules/combat_states
+import ../rules/actor_states
 import ../util
 
 proc makeSpritemap(values: seq[seq[string]]): ref Table[string, IntPoint] =
@@ -46,7 +46,7 @@ let SPRITEMAP_TILES = makeSpritemap(@[
   @["throwable", "gun", "knife"],
 ])
 
-proc spritemapIDHenchman(state: CombatState): Option[string] =
+proc spritemapIDHenchman(state: ActorState): Option[string] =
   case state
     of standPassive:        return some("stand")
     of standActive:         return some("stand")
@@ -75,7 +75,7 @@ proc spritemapIDHenchman(state: CombatState): Option[string] =
     of losingWeapon:        return some("losing_weapon")
     of breakingWeapon:      return none(string)
 
-proc spritemapIDVigilante(state: CombatState): Option[string] =
+proc spritemapIDVigilante(state: ActorState): Option[string] =
   case state
     of standPassive:        return some("bm_stand")
     of standActive:         return some("bm_stand")
@@ -104,7 +104,7 @@ proc spritemapIDVigilante(state: CombatState): Option[string] =
     of losingWeapon:        return none(string)
     of breakingWeapon:      return some("bm_disabling_weapon")
 
-proc actorSpritemapPoint*(actorKind: ActorKind, state: CombatState): IntPoint =
+proc actorSpritemapPoint*(actorKind: ActorKind, state: ActorState): IntPoint =
   let maybeID = case actorKind
     of henchman: spritemapIDHenchman(state)
     of vigilante: spritemapIDVigilante(state)

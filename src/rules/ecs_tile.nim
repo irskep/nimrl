@@ -1,5 +1,5 @@
 import ecs_base
-import combat_states
+import actor_states
 
 type
   TileComponent* = ref object of Component

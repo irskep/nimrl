@@ -1,7 +1,7 @@
 import options
-import combat_states
+import actor_states
 
-proc getWeaponChecksForState(state: CombatState): Option[WeaponClass] =
+proc getWeaponChecksForState(state: ActorState): Option[WeaponClass] =
   case state:
     of
       superpunchingBefore,
@@ -16,7 +16,7 @@ proc getWeaponChecksForState(state: CombatState): Option[WeaponClass] =
     else:
       return none(WeaponClass)
 
-proc getIsLegalBaseMoveForHenchman(state: CombatState): bool =
+proc getIsLegalBaseMoveForHenchman(state: ActorState): bool =
   case state:
     of
       standPassive,
@@ -49,7 +49,7 @@ proc getIsLegalBaseMoveForHenchman(state: CombatState): bool =
       superpunchingAfter:
         return false
 
-proc getIsLegalBaseMoveForVigilante(state: CombatState): bool =
+proc getIsLegalBaseMoveForVigilante(state: ActorState): bool =
   case state:
     of
       standActive,
@@ -83,7 +83,7 @@ proc getIsLegalBaseMoveForVigilante(state: CombatState): bool =
         return false
 
 proc getIsLegalMove*(kind: ActorKind,
-                     state: CombatState,
+                     state: ActorState,
                      weaponClass: WeaponClass,
                      weaponClassOnFloor: Option[WeaponClass]): bool =
 

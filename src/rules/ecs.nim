@@ -2,12 +2,13 @@ import options
 
 import ../util
 
-import combat_states
+import actor_states
 import ecs_base
 import ecs_actor
 import ecs_item
 import ecs_spatial
 import ecs_tile
+import actor_state_transitions
 import tilemap
 
 type
@@ -17,9 +18,18 @@ type
     spatialSystem*: SpatialSystem
     tileSystem*: TileSystem
 
-proc addHenchman(ecs: VigECS, point: IntPoint): Entity =
+proc addHenchman*(ecs: VigECS, point: IntPoint): Entity =
   let charE = newEntity()
   ecs.actorSystem[charE] = newActorComponent(henchman, standPassive, 0)
+  assert(ecs.actorSystem[charE].get().entity == charE)
+
+  ecs.itemSystem[charE] = newItemComponent()
+
+  ecs.spatialSystem.add(charE, 2, point)
+
+proc addVigilante*(ecs: VigECS, point: IntPoint): Entity =
+  let charE = newEntity()
+  ecs.actorSystem[charE] = newActorComponent(vigilante, standPassive, 0)
   assert(ecs.actorSystem[charE].get().entity == charE)
 
   ecs.itemSystem[charE] = newItemComponent()
@@ -54,11 +64,12 @@ proc newVigECSForStateDebugScene*(): VigECS =
     spatialSystem: newSpatialSystem((5, 5)),
     tileSystem: newTileSystem())
   result.populateTilemap()
-  discard result.addHenchman((2, 2))
+  # discard result.addHenchman((2, 2))
+  discard result.addVigilante((2, 2))
 
 export ecs_base
 export ecs_actor
 export ecs_item
 export ecs_spatial
 export ecs_tile
-export combat_states
+export actor_states
