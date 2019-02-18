@@ -9,6 +9,7 @@ import ../rules/actor_state_transitions
 import ../rules/ecs
 import ../rules/tilemap
 import ../util
+import ../input
 
 import base_scene
 import world_rendering
@@ -19,6 +20,15 @@ type
     ecs*: VigECS
     entity*: Entity
     camera*: Camera2D
+
+proc isInputActive*(inputID: string): bool =
+  case inputID:
+    of "faceUp": return IsKeyPressed(KEY_UP)
+    of "faceRight": return IsKeyPressed(KEY_RIGHT)
+    of "faceDown": return IsKeyPressed(KEY_DOWN)
+    of "faceLeft": return IsKeyPressed(KEY_LEFT)
+    of "dodge": return IsKeyPressed(KEY_A)
+    else: return false
 
 proc newStateDebugScene*(assetStore: AssetStore): StateDebugScene =
   var camera: Camera2D

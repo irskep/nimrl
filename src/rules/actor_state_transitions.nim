@@ -18,6 +18,7 @@ type
     endState*: ActorState
 
 method name*(ast: ActorStateTransition): string {. base .} = "UNNAMED"
+method inputID*(ast: ActorStateTransition): string {. base .} = "NO INPUT"
 
 method positionDeltas*(
   ast: ActorStateTransition,
@@ -51,6 +52,7 @@ type
   ASTDodge* = ref object of ActorStateTransition
 
 method name*(ast: ASTDodge): string = "dodge"
+method inputID*(ast: ASTDodge): string = "dodge"
 
 method positionDeltas*(ast: ASTDodge, actor: ActorComponent): seq[IntPoint] = @[(-1, 0), (0, -1), (1, 0), (0, -1)]
 
