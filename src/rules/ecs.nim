@@ -18,23 +18,7 @@ type
     spatialSystem*: SpatialSystem
     tileSystem*: TileSystem
 
-proc addHenchman*(ecs: VigECS, point: IntPoint): Entity =
-  let charE = newEntity()
-  ecs.actorSystem[charE] = newActorComponent(henchman, standPassive, 0)
-  assert(ecs.actorSystem[charE].get().entity == charE)
-
-  ecs.itemSystem[charE] = newItemComponent()
-
-  ecs.spatialSystem.add(charE, 2, point)
-
-proc addVigilante*(ecs: VigECS, point: IntPoint): Entity =
-  let charE = newEntity()
-  ecs.actorSystem[charE] = newActorComponent(vigilante, standPassive, 0)
-  assert(ecs.actorSystem[charE].get().entity == charE)
-
-  ecs.itemSystem[charE] = newItemComponent()
-
-  ecs.spatialSystem.add(charE, 2, point)
+### API ###
 
 proc setTile*(ecs: VigECS, point: IntPoint, tile: EnvironmentTile): Entity =
   if ecs.spatialSystem.tilemap.entities(0, point).len == 0:
@@ -46,6 +30,56 @@ proc setTile*(ecs: VigECS, point: IntPoint, tile: EnvironmentTile): Entity =
     ecs.tileSystem[result].get().tile = tile
     ecs.spatialSystem.move(result, 0, point)
 
+proc isPossible*(
+    ecs: VigECS,
+    ast: ActorStateTransition,
+    point: IntPoint,
+    entity: Entity,
+    positionDelta: IntPoint): bool =
+  let actorC = ecs.actorSystem[entity].get()
+  ast.isPossible(
+    ecs.actorSystem,
+    ecs.itemSystem,
+    ecs.spatialSystem,
+    ecs.tileSystem,
+    point,
+    entity,
+    actorC,
+    positionDelta)
+
+proc apply*(
+    ecs: VigECS,
+    ast: ActorStateTransition,
+    point: IntPoint,
+    entity: Entity,
+    positionDelta: IntPoint) =
+  let actorC = ecs.actorSystem[entity].get()
+  ast.apply(
+    ecs.actorSystem,
+    ecs.itemSystem,
+    ecs.spatialSystem,
+    ecs.tileSystem,
+    point,
+    entity,
+    actorC,
+    positionDelta)
+
+### CREATE THINGS ###
+
+proc addHenchman*(ecs: VigECS, point: IntPoint): Entity =
+  let charE = newEntity()
+  ecs.actorSystem[charE] = newActorComponent(henchman, standPassive, up)
+  assert(ecs.actorSystem[charE].get().entity == charE)
+
+  ecs.spatialSystem.add(charE, 2, point)
+
+proc addVigilante*(ecs: VigECS, point: IntPoint): Entity =
+  let charE = newEntity()
+  ecs.actorSystem[charE] = newActorComponent(vigilante, standPassive, up)
+  assert(ecs.actorSystem[charE].get().entity == charE)
+
+  ecs.spatialSystem.add(charE, 2, point)
+
 proc populateTilemap(ecs: VigECS) =
   for y in 0..<ecs.spatialSystem.tilemap.height:
     for x in 0..<ecs.spatialSystem.tilemap.width:
@@ -56,6 +90,8 @@ proc populateTilemap(ecs: VigECS) =
       else:
         discard ecs.setTile((x, y), floor)
   # echo(ecs.spatialSystem.tilemap.cells[0])
+
+### INITS ###
 
 proc newVigECSForStateDebugScene*(): VigECS =
   result = VigECS(

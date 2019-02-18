@@ -27,5 +27,5 @@ proc cwFromTop*(orientation: Orientation): cfloat =
 
 proc newActorSystem*(): ActorSystem = ActorSystem()
 
-proc newActorComponent*(actorKind: ActorKind, state: ActorState, orientation: int): ActorComponent =
+proc newActorComponent*(actorKind: ActorKind, state: ActorState, orientation: Orientation): ActorComponent =
   return ActorComponent(actorKind: actorKind, state: state, orientation: up)

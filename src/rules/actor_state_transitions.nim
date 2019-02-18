@@ -20,9 +20,8 @@ type
 method name*(ast: ActorStateTransition): string {. base .} = "UNNAMED"
 method inputID*(ast: ActorStateTransition): string {. base .} = "NO INPUT"
 
-method positionDeltas*(
-  ast: ActorStateTransition,
-  actor: ActorComponent): seq[IntPoint] {. base .} = @[]
+func positionDeltas*(ast: ActorStateTransition): seq[IntPoint] =
+  @[(-1, 0), (0, -1), (1, 0), (0, -1)]
 
 method isPossible*(
   ast: ActorStateTransition,
@@ -46,6 +45,38 @@ method apply*(
   actor: ActorComponent,
   positionDelta: IntPoint) {. base .} = discard
 
+### PLACEHOLDER ###
+
+type
+  ASTNop* = ref object of ActorStateTransition
+
+method name*(ast: ASTNop): string = "nop"
+method inputID*(ast: ASTNop): string = "nop"
+
+method isPossible*(
+    ast: ASTNop,
+    actorS: ActorSystem,
+    itemS: ItemSystem,
+    spatialS: SpatialSystem,
+    tileS: TileSystem,
+    point: IntPoint,
+    entity: Entity,
+    actor: ActorComponent,
+    positionDelta: IntPoint): bool =
+  false
+
+method apply*(
+    ast: ASTNop,
+    actorS: ActorSystem,
+    itemS: ItemSystem,
+    spatialS: SpatialSystem,
+    tileS: TileSystem,
+    point: IntPoint,
+    entity: Entity,
+    actor: ActorComponent,
+    positionDelta: IntPoint) =
+  discard
+
 ### DODGE ###
 
 type
@@ -53,8 +84,6 @@ type
 
 method name*(ast: ASTDodge): string = "dodge"
 method inputID*(ast: ASTDodge): string = "dodge"
-
-method positionDeltas*(ast: ASTDodge, actor: ActorComponent): seq[IntPoint] = @[(-1, 0), (0, -1), (1, 0), (0, -1)]
 
 method isPossible*(
     ast: ASTDodge,
@@ -68,13 +97,13 @@ method isPossible*(
     positionDelta: IntPoint): bool =
   
   let targetPoint = point + positionDelta
-  let envEntity = spatialS.find(ENV_LAYER, targetPoint)
+  let envEntity = spatialS.getOne(ENV_LAYER, targetPoint)
 
   if not spatialS.isInBounds(targetPoint):
     false
   elif envEntity.isSome and not tileS[envEntity.get()].get().tile.isPassable:
     false
-  elif not spatialS.find(ACTOR_LAYER, targetPoint).isNone:
+  elif not spatialS.getOne(ACTOR_LAYER, targetPoint).isNone:
     false
   else:
     true
@@ -93,7 +122,7 @@ method apply*(
 
 ### AGGREGATES ###
 
-let ACTOR_STATE_TRANSITIONS_BY_KIND = {
-  ActorKind.henchman: @[ASTDodge()],
-  ActorKind.vigilante: @[ASTDodge()],
+let ACTOR_STATE_TRANSITIONS_BY_KIND*: Table[ActorKind, seq[ActorStateTransition]] = {
+  ActorKind.henchman: @[ASTDodge(), ASTNop()],
+  ActorKind.vigilante: @[ASTDodge(), ASTNop()],
 }.toTable

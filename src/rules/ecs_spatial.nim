@@ -15,8 +15,8 @@ type
 
 ### COMPONENT ###
 
-proc newSpatialComponent*(point: IntPoint): SpatialComponent =
-  result = SpatialComponent(point: point)
+proc newSpatialComponent*(point: IntPoint, layer: int): SpatialComponent =
+  result = SpatialComponent(layer: layer, point: point)
 
 ### SYSTEM ###
   
@@ -24,7 +24,7 @@ proc newSpatialSystem*(size: IntPoint): SpatialSystem =
   result = SpatialSystem(tilemap: newTilemap(3, size.x, size.y))
 
 proc add*(spatialSystem: SpatialSystem, entity: Entity, layer: int, point: IntPoint) =
-  spatialSystem[entity] = newSpatialComponent(point) 
+  spatialSystem[entity] = newSpatialComponent(point, layer) 
   spatialSystem.tilemap.add(entity, layer, point)
 
 proc move*(spatialSystem: SpatialSystem, entity: Entity, layer: int, point: IntPoint) =
@@ -34,18 +34,10 @@ proc move*(spatialSystem: SpatialSystem, entity: Entity, layer: int, point: IntP
   c.point = point
   spatialSystem.tilemap.add(entity, layer, point)
 
-proc move*(spatialSystem: SpatialSystem, entity: Entity, point: IntPoint) =
-  let c = spatialSystem[entity].get()
-  let layer = spatialSystem.tilemap.findLayer(entity, c.point)
-  spatialSystem.tilemap.remove(entity, c.layer, c.point)
-  c.layer = layer
-  c.point = point
-  spatialSystem.tilemap.add(entity, layer, point)
-
 proc isInBounds*(spatialSystem: SpatialSystem, point: IntPoint): bool =
   result = spatialSystem.tilemap.isInBounds(point)
 
-proc find*(spatialSystem: SpatialSystem, layer: int, point: IntPoint): Option[Entity] =
+proc getOne*(spatialSystem: SpatialSystem, layer: int, point: IntPoint): Option[Entity] =
   let tilemap = spatialSystem.tilemap
 
   if point.x < 0 or point.y < 0 or point.x >= tilemap.width or point.y >= tilemap.height:

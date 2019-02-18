@@ -32,14 +32,13 @@ proc add*(tilemap: Tilemap, entity: Entity, layer: int, point: IntPoint) =
   tilemap.cells[layer][point.y][point.x].add(entity)
 
 proc remove*(tilemap: Tilemap, entity: Entity, layer: int, point: IntPoint) =
+  if not tilemap.cells[layer][point.y][point.x].contains(entity):
+    echo("looking for ", entity, " in layer ", layer)
+    echo(tilemap.cells)
+    assert(
+      tilemap.cells[layer][point.y][point.x].contains(entity),
+      "Can't remove entity; it isn't there")
   tilemap.cells[layer][point.y][point.x].keepIf(proc(e: Entity): bool = e != entity)
-  
-proc findLayer*(tilemap: Tilemap, entity: Entity, point: IntPoint): int =
-  for layer in 0..<tilemap.layersCount:
-    if tilemap.cells[layer][point.y][point.x].contains(entity):
-      return layer
-  assert(false, "Can't find entity at given point")
-  return 0
 
 proc isInBounds*(tilemap: Tilemap, point: IntPoint): bool =
   return point.x >= 0 and point.y >= 0 and point.x < tilemap.width and point.y < tilemap.height
